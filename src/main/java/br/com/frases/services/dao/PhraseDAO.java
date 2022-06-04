@@ -10,7 +10,7 @@ public interface PhraseDAO {
     PhraseEntity create(PhraseDTO phraseDTO);
     List<PhraseEntity> findAll();
     PhraseEntity findById(Long id);
-    PhraseEntity update(PhraseDTO phraseDTO);
-    Boolean delete(PhraseDTO phraseDTO);
+    PhraseEntity update(Long id, PhraseDTO phraseDTO);
+    Boolean delete(Long id);
 
 }
