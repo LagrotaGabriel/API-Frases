@@ -1,12 +1,23 @@
 package br.com.frases.resources;
 
+import br.com.frases.config.ModelMapperConfig;
+import br.com.frases.models.dto.PhraseDTO;
+import br.com.frases.resources.exceptions.ObjectNotFoundException;
+import br.com.frases.services.PhraseService;
+import br.com.frases.services.dao.PhraseDAOImpl;
 import io.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/phrase")
@@ -14,6 +25,68 @@ import javax.ws.rs.core.MediaType;
 @Consumes({MediaType.APPLICATION_JSON, "application/json"})
 @Api(value = "O aplicativo tem como intuito realizar o cadastro, consulta, alteração e delete de frases")
 public class PhraseResource {
+
+    @Autowired
+    PhraseDAOImpl phraseDAO;
+
+    @Autowired
+    PhraseService phraseService;
+
+    @Autowired
+    ModelMapperConfig modelMapper;
+
+    @ApiOperation(
+            value = "Buscar todas as frases",
+            notes = "Busca todas as frases cadastradas no banco de dados da API",
+            consumes = MediaType.APPLICATION_JSON,
+            produces = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses(value = {
+        @ApiResponse(code=200, message = "Frases encontradas com sucesso", response = PhraseDTO.class),
+        @ApiResponse(code=401, message = "Acesso não autorizado"),
+        @ApiResponse(code=404, message = "Frases não encontradas", response = ObjectNotFoundException.class),
+        @ApiResponse(code=500, message = "Erro de comunicação com a API")
+    })
+    @GetMapping
+    public ResponseEntity<List<PhraseDTO>> findAll(){
+
+        return ResponseEntity.status(HttpStatus.OK).body(phraseService.findAllValidation());
+
+    }
+
+    @ApiOperation(
+            value = "Busca por ID",
+            notes = "Busca uma frase no banco de dados do projeto com base no id passado pelo usuário",
+            consumes = MediaType.APPLICATION_JSON,
+            produces = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code=200, message = "Frase encontrada com sucesso", response = PhraseDTO.class),
+            @ApiResponse(code=401, message = "Acesso não autorizado"),
+            @ApiResponse(code=404, message = "Frase não encontrada", response = ObjectNotFoundException.class),
+            @ApiResponse(code=500, message = "Erro de comunicação com a API")
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<PhraseDTO> findById(@PathVariable Long id){
+
+        return ResponseEntity.status(HttpStatus.OK).body(phraseService.findByIdConverter(id));
+
+    }
+
+    @PostMapping
+    public ResponseEntity<PhraseDTO> create(@RequestBody PhraseDTO phraseDTO){
+
+        return null;
+        //TODO Dar seguimento no post mapping
+
+    }
+
+
+
+
+
+
+
 
 
 
