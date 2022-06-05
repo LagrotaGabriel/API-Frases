@@ -1,5 +1,6 @@
 package br.com.frases.models.entity;
 
+import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,9 +21,11 @@ public class PhraseEntity {
     @Column(name = "id")
     private Long id;
 
+    @NotNull
     @Column(name = "timeStamp")
     private LocalDateTime timeStamp;
 
+    @NotNull
     @Column(name = "phrase")
     private String phrase;
 
