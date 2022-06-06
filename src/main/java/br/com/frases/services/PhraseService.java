@@ -24,6 +24,16 @@ public class PhraseService {
     @Autowired
     ModelMapperConfig modelMapper;
 
+    public PhraseDTO createValidation(PhraseDTO phraseDTO){
+
+        if(phraseDTO.getPhrase() != null && !phraseDTO.getPhrase().equals("")) {
+            phraseDTO.setTimeStamp(LocalDateTime.now());
+            return modelMapper.mapper().map(phraseDAO.create(phraseDTO), PhraseDTO.class);
+        }
+        throw new NullPointerException("A frase precisa estar preenchida");
+
+    }
+
     public List<PhraseDTO> findAllValidation(){
 
         List<PhraseEntity> phraseEntities = phraseDAO.findAll();
@@ -41,13 +51,24 @@ public class PhraseService {
 
     }
 
-    public PhraseDTO createValidation(PhraseDTO phraseDTO){
+    public PhraseDTO updateValidation(Long id, PhraseDTO phraseDTO){
 
-        if(phraseDTO.getPhrase() != null && !phraseDTO.getPhrase().equals("")) {
-            phraseDTO.setTimeStamp(LocalDateTime.now());
-            return modelMapper.mapper().map(phraseDAO.create(phraseDTO), PhraseDTO.class);
+        if(phraseDTO.getPhrase() != null && !phraseDTO.getPhrase().equals("") && id != null) {
+            return modelMapper.mapper().map(phraseDAO.update(id, phraseDTO), PhraseDTO.class);
         }
-        throw new NullPointerException("A frase precisa estar preenchida");
+        else if(id == null){
+            throw new NullPointerException("ID não informado");
+        }
+        else {
+            throw new NullPointerException("A frase precisa estar preenchida");
+        }
+
+    }
+
+    public Boolean deleteValidation(Long id){
+
+        if (id != null) return phraseDAO.delete(id);
+        throw new NullPointerException("Campo de preenchimento de id vazio");
 
     }
 
