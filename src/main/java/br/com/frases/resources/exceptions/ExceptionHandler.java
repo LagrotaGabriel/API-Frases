@@ -1,14 +1,20 @@
 package br.com.frases.resources.exceptions;
 
-import com.fasterxml.jackson.core.JsonParseException;
+import org.modelmapper.spi.ErrorMessage;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @ControllerAdvice
 public class ExceptionHandler extends ResponseEntityExceptionHandler {
@@ -34,11 +40,14 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<StandartError> httpMessageNotReadableException(HttpServletRequest httpServletRequest){
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+                                                                  HttpHeaders headers,
+                                                                  HttpStatus status,
+                                                                  WebRequest request) {
 
-        StandartError error = new StandartError(LocalDateTime.now(), 400, "Teste",
-                httpServletRequest.getRequestURI());
+        StandartError error = new StandartError(
+                LocalDateTime.now(), 400, "Falha de violação de dados", "/api/phrase");
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
