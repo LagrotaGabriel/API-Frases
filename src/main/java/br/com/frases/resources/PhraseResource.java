@@ -64,7 +64,7 @@ public class PhraseResource {
             @ApiResponse(code=200, message = "Frase encontrada com sucesso", response = PhraseDTO.class),
             @ApiResponse(code=401, message = "Acesso não autorizado"),
             @ApiResponse(code=404, message = "Frase não encontrada", response = ObjectNotFoundException.class),
-            @ApiResponse(code=500, message = "Erro de comunicação com a API")
+            @ApiResponse(code=500, message = "Falha de comunicação com a API")
     })
     @GetMapping("/{id}")
     public ResponseEntity<PhraseDTO> findById(@PathVariable Long id){
@@ -73,11 +73,22 @@ public class PhraseResource {
 
     }
 
+    @ApiOperation(
+            value = "Cadastrar nova frase",
+            notes = "Salva uma nova frase no banco de dados da API",
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Frase criada com sucesso", response = PhraseDTO.class),
+            @ApiResponse(code = 400, message = "Falha de violação de dados", response = RuntimeException.class),
+            @ApiResponse(code = 401, message = "Acesso não autorizado"),
+            @ApiResponse(code = 500, message = "Falha de comunicação com a API")
+    })
     @PostMapping
     public ResponseEntity<PhraseDTO> create(@RequestBody PhraseDTO phraseDTO){
 
-        return null;
-        //TODO Dar seguimento no post mapping
+        return ResponseEntity.status(HttpStatus.CREATED).body(phraseService.createValidation(phraseDTO));
 
     }
 
