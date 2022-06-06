@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.attribute.standard.Media;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -50,9 +51,7 @@ public class PhraseResource {
     })
     @GetMapping
     public ResponseEntity<List<PhraseDTO>> findAll(){
-
         return ResponseEntity.status(HttpStatus.OK).body(phraseService.findAllValidation());
-
     }
 
     @ApiOperation(
@@ -69,9 +68,7 @@ public class PhraseResource {
     })
     @GetMapping("/{id}")
     public ResponseEntity<PhraseDTO> findById(@PathVariable Long id){
-
         return ResponseEntity.status(HttpStatus.OK).body(phraseService.findByIdConverter(id));
-
     }
 
     @ApiOperation(
@@ -88,19 +85,43 @@ public class PhraseResource {
     })
     @PostMapping
     public ResponseEntity<PhraseDTO> create(@RequestBody PhraseDTO phraseDTO){
-
         return ResponseEntity.status(HttpStatus.CREATED).body(phraseService.createValidation(phraseDTO));
-
     }
 
+    @ApiOperation(
+            value = "Atualiza frase por id",
+            notes = "Atualiza uma frase no banco de dados da API com base no id e no valor passado pelo usuário",
+            consumes = MediaType.APPLICATION_JSON,
+            produces = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Frase atualizada com sucesso", response = PhraseDTO.class),
+            @ApiResponse(code = 400, message = "Falha de violação de dados", response = HttpMessageNotReadableException.class),
+            @ApiResponse(code = 401, message = "Acesso não autorizado"),
+            @ApiResponse(code = 500, message = "Falha de comunicação com a API")
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity<PhraseDTO> update(@PathVariable Long id, @RequestBody PhraseDTO phraseDTO){
+        return ResponseEntity.status(HttpStatus.OK).body(phraseService.updateValidation(id, phraseDTO));
+    }
 
-
-
-
-
-
-
-
-
+    @ApiOperation(
+            value = "Deleta uma frase",
+            notes = "Deleta uma frase do banco de dados com base no id passado pelo usuário através do path",
+            consumes = MediaType.APPLICATION_JSON,
+            produces = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Frase deletada com sucesso", response = ResponseEntity.class),
+            @ApiResponse(code = 400, message = "Falha de violação de dados", response = HttpMessageNotReadableException.class),
+            @ApiResponse(code = 401, message = "Acesso não autorizado"),
+            @ApiResponse(code = 404, message = "Frase não encontrada", response = ObjectNotFoundException.class),
+            @ApiResponse(code = 500, message = "Falha de comunicação com a API")
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable Long id){
+        if(phraseService.deleteValidation(id)) return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
 
 }
