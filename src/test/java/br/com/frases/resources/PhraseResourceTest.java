@@ -52,4 +52,17 @@ public class PhraseResourceTest {
 
     }
 
+    @Test
+    @DisplayName("Should test PhraseResourceCreateMethod")
+    public void shouldTestPhraseResourceCreateMethod(){
+
+        Mockito.when(phraseService.createValidation(Mockito.any()))
+                .thenReturn(PhraseDTOBuilder.builder().withStaticTimeStamp().build());
+
+        Assertions.assertEquals("<201 CREATED Created,PhraseDTO(id=1, timeStamp=2022-06-04T02:06:57.260990900, " +
+                "phrase=Frase de teste),[]>", phraseResource.create(PhraseDTOBuilder.builder().withStaticTimeStamp()
+                .build()).toString());
+
+    }
+
 }

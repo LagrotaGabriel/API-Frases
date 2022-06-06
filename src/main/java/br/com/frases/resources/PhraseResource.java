@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.Consumes;
@@ -81,7 +82,7 @@ public class PhraseResource {
     )
     @ApiResponses({
             @ApiResponse(code = 201, message = "Frase criada com sucesso", response = PhraseDTO.class),
-            @ApiResponse(code = 400, message = "Falha de violação de dados", response = RuntimeException.class),
+            @ApiResponse(code = 400, message = "Falha de violação de dados", response = HttpMessageNotReadableException.class),
             @ApiResponse(code = 401, message = "Acesso não autorizado"),
             @ApiResponse(code = 500, message = "Falha de comunicação com a API")
     })
