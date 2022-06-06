@@ -78,6 +78,7 @@ public class PhraseResource {
             consumes = MediaType.APPLICATION_JSON
     )
     @ApiResponses({
+            @ApiResponse(code = 200, message = "Frase criada com sucesso", response = PhraseDTO.class),
             @ApiResponse(code = 201, message = "Frase criada com sucesso", response = PhraseDTO.class),
             @ApiResponse(code = 400, message = "Falha de violação de dados", response = HttpMessageNotReadableException.class),
             @ApiResponse(code = 401, message = "Acesso não autorizado"),
@@ -96,13 +97,15 @@ public class PhraseResource {
     )
     @ApiResponses({
             @ApiResponse(code = 200, message = "Frase atualizada com sucesso", response = PhraseDTO.class),
+            @ApiResponse(code = 201, message = "Frase atualizada com sucesso", response = PhraseDTO.class),
             @ApiResponse(code = 400, message = "Falha de violação de dados", response = HttpMessageNotReadableException.class),
             @ApiResponse(code = 401, message = "Acesso não autorizado"),
+            @ApiResponse(code = 404, message = "Usuário não encontrado"),
             @ApiResponse(code = 500, message = "Falha de comunicação com a API")
     })
     @PutMapping("/{id}")
     public ResponseEntity<PhraseDTO> update(@PathVariable Long id, @RequestBody PhraseDTO phraseDTO){
-        return ResponseEntity.status(HttpStatus.OK).body(phraseService.updateValidation(id, phraseDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).body(phraseService.updateValidation(id, phraseDTO));
     }
 
     @ApiOperation(

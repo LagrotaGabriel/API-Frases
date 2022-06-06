@@ -37,7 +37,7 @@ public class SwaggerConfig {
                 "1.0.0",
                 "Terms of Service",
                 new Contact("Gabriel Lagrota",
-                        "https://github.com/LagrotaGabriel/API-Calculadora-de-Juros", //TODO AJUSTAR LINK DO GITHUB
+                        "https://github.com/LagrotaGabriel/API-Frases",
                         "gabriellagrota23@gmail.com"),
                 "Apache License Version 2.0",
                 "https://www.apache.org/licensen.html",
