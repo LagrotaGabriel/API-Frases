@@ -91,6 +91,9 @@ public class PhraseDAOImplTest {
         Mockito.when(phraseRepository.findById(Mockito.any()))
                 .thenReturn(Optional.of(PhraseEntityBuilder.builder().withStaticTimeStamp().build()));
 
+        Mockito.when(phraseRepository.save(Mockito.any()))
+                .thenReturn(PhraseEntityBuilder.builder().withStaticTimeStamp().build());
+
         Assertions.assertEquals("PhraseEntity(id=1, timeStamp=2022-06-04T02:06:57.260990900, phrase=Frase de " +
                 "teste)", impl.update(1L, PhraseDTOBuilder.builder().withStaticTimeStamp().build()).toString());
 

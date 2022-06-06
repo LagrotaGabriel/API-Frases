@@ -8,6 +8,7 @@ import br.com.frases.resources.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,7 +42,10 @@ public class PhraseDAOImpl implements PhraseDAO{
 
         Optional<PhraseEntity> phraseEntity = phraseRepository.findById(id);
 
-        phraseEntity.ifPresent(entity -> entity.setPhrase(phraseDTO.getPhrase()));
+        if(phraseEntity.isPresent()) {
+            phraseEntity.ifPresent(entity -> entity.setPhrase(phraseDTO.getPhrase()));
+            phraseRepository.save(phraseEntity.get());
+        }
 
         return phraseEntity.orElseThrow(() -> new ObjectNotFoundException("Id não encontrado"));
 

@@ -121,4 +121,69 @@ public class PhraseServiceTest {
         }
 
     }
+
+    @Test
+    @DisplayName("Should test PhraseService updateValidation method with success")
+    public void shouldTestPhraseServiceUpdateValidationWithSuccess(){
+
+        Mockito.when(modelMapper.mapper())
+                .thenReturn(new ModelMapper());
+
+        Mockito.when(phraseDAO.update(Mockito.any(), Mockito.any()))
+                .thenReturn(PhraseEntityBuilder.builder().withStaticTimeStamp().build());
+
+        Assertions.assertEquals("PhraseDTO(id=1, timeStamp=2022-06-04T02:06:57.260990900, phrase=Frase de teste)",
+                phraseService.updateValidation(1L, PhraseDTOBuilder.builder().withStaticTimeStamp().build()).toString());
+
+    }
+
+    @Test
+    @DisplayName("Should test PhraseService updateValidation method with null id throwing a NullPointerException")
+    public void shouldTestPhraseServiceUpdateValidationWithNullId(){
+
+        try {
+            phraseService.updateValidation(null, PhraseDTOBuilder.builder().withStaticTimeStamp().build());
+            Assertions.fail();
+        }
+        catch (NullPointerException e){
+            Assertions.assertEquals("ID não informado", e.getMessage());
+        }
+
+    }
+
+    @Test
+    @DisplayName("Should test PhraseService updateValidation method with null phrase throwing a NullPointerException")
+    public void shouldTestPhraseServiceUpdateValidationWithNullPhrase(){
+
+        try {
+            phraseService.updateValidation(1L, PhraseDTOBuilder.builder().withNullPhrase().build());
+            Assertions.fail();
+        }
+        catch (NullPointerException e){
+            Assertions.assertEquals("A frase precisa estar preenchida", e.getMessage());
+        }
+
+    }
+
+    @Test
+    @DisplayName("Should test PhraseService deleteValidation method with success")
+    public void shouldTestPhraseServiceDeleteValidationMethodWithSuccess(){
+        Mockito.when(phraseDAO.delete(Mockito.any())).thenReturn(true);
+        Assertions.assertTrue(phraseService.deleteValidation(1L));
+    }
+
+    @Test
+    @DisplayName("Should test PhraseService deleteValidation method with NullPointerException throw")
+    public void shouldTestPhraseServiceDeleteValidationMethodWithNullPointerExceptionThrow(){
+
+        try{
+            phraseService.deleteValidation(null);
+            Assertions.fail();
+        }
+        catch (NullPointerException e){
+            Assertions.assertEquals("Campo de preenchimento de id vazio", e.getMessage());
+        }
+
+    }
+
 }

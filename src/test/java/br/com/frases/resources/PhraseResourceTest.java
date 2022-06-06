@@ -53,7 +53,7 @@ public class PhraseResourceTest {
     }
 
     @Test
-    @DisplayName("Should test PhraseResourceCreateMethod")
+    @DisplayName("Should test PhraseResource create method")
     public void shouldTestPhraseResourceCreateMethod(){
 
         Mockito.when(phraseService.createValidation(Mockito.any()))
@@ -64,5 +64,31 @@ public class PhraseResourceTest {
                 .build()).toString());
 
     }
+
+    @Test
+    @DisplayName("Should test PhraseResource update method")
+    public void shouldTestPhraseResourceUpdateMethod(){
+
+        Mockito.when(phraseService.updateValidation(Mockito.any(), Mockito.any()))
+                .thenReturn(PhraseDTOBuilder.builder().withStaticTimeStamp().build());
+
+        System.err.println(phraseResource.update(1L, PhraseDTOBuilder.builder().withStaticTimeStamp().build()));
+    }
+
+    @Test
+    @DisplayName("Should test PhraseResource delete method with success")
+    public void shouldTestPhraseResourceDeleteMethodWithSuccess(){
+        Mockito.when(phraseService.deleteValidation(Mockito.any())).thenReturn(true);
+        Assertions.assertEquals("<200 OK OK,[]>", phraseResource.deleteById(1L).toString());
+    }
+
+    @Test
+    @DisplayName("Should test PhraseResource delete method with not found return")
+    public void shouldTestPhraseResourceDeleteMethodWithNotFoundReturn(){
+        Mockito.when(phraseService.deleteValidation(Mockito.any())).thenReturn(false);
+        Assertions.assertEquals("<404 NOT_FOUND Not Found,[]>", phraseResource.deleteById(1L).toString());
+    }
+
+
 
 }
