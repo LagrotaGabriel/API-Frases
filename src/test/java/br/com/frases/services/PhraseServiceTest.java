@@ -1,8 +1,10 @@
 package br.com.frases.services;
 
 import br.com.frases.config.ModelMapperConfig;
+import br.com.frases.mocks.PhraseDTOBuilder;
 import br.com.frases.mocks.PhraseEntityBuilder;
 import br.com.frases.models.entity.PhraseEntity;
+import br.com.frases.resources.exceptions.NullPointerException;
 import br.com.frases.resources.exceptions.ObjectNotFoundException;
 import br.com.frases.services.dao.PhraseDAOImpl;
 import org.junit.jupiter.api.Assertions;
@@ -92,4 +94,31 @@ public class PhraseServiceTest {
 
     }
 
+    @Test
+    @DisplayName("Should test PhraseService createValidation method with success")
+    public void shouldTestPhraseServiceCreateValidationWithSuccess(){
+
+        Mockito.when(modelMapper.mapper())
+                .thenReturn(new ModelMapper());
+        Mockito.when(phraseDAO.create(Mockito.any()))
+                .thenReturn(PhraseEntityBuilder.builder().withStaticTimeStamp().build());
+
+        Assertions.assertEquals("PhraseDTO(id=1, timeStamp=2022-06-04T02:06:57.260990900, phrase=Frase de teste)",
+                phraseService.createValidation(PhraseDTOBuilder.builder().withStaticTimeStamp().build()).toString());
+
+    }
+
+    @Test
+    @DisplayName("Should test PhraseService createValidation method with NullPointerException throw")
+    public void shouldTestPhraseServiceCreateValidationWithNullPointerExceptionThrow(){
+
+        try {
+            phraseService.createValidation(PhraseDTOBuilder.builder().withNullPhrase().withStaticTimeStamp().build());
+            Assertions.fail();
+        }
+        catch (NullPointerException e){
+            Assertions.assertEquals("A frase precisa estar preenchida", e.getMessage());
+        }
+
+    }
 }
