@@ -1,10 +1,8 @@
 package br.com.frases.resources;
 
-import br.com.frases.config.ModelMapperConfig;
 import br.com.frases.models.dto.PhraseDTO;
 import br.com.frases.resources.exceptions.ObjectNotFoundException;
 import br.com.frases.services.PhraseService;
-import br.com.frases.services.dao.PhraseDAOImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -15,12 +13,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.attribute.standard.Media;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
+/** Classe cujo objetivo é fornecer os endpoints para comunicação com a camada de serviços através do JSON
+ ** @author Gabriel Lagrota
+ ** @version 1.0.0
+ ** @since 06/06/2022
+ ** @email gabriellagrota23@gmail.com
+ ** @github https://github.com/LagrotaGabriel/API-Frases/blob/master/src/main/java/br/com/frases/resources/PhraseResource.java */
 @RestController
 @RequestMapping("api/phrase")
 @Produces({MediaType.APPLICATION_JSON, "application/json"})
@@ -29,14 +32,10 @@ import java.util.List;
 public class PhraseResource {
 
     @Autowired
-    PhraseDAOImpl phraseDAO;
-
-    @Autowired
     PhraseService phraseService;
 
-    @Autowired
-    ModelMapperConfig modelMapper;
-
+    /** Método que objetiva retornar uma lista contendo todas as frases salvas no banco de dados da API
+     ** @return retorna uma lista de contendo todos os objetos do tipo PhraseDTO do banco de dados da API */
     @ApiOperation(
             value = "Buscar todas as frases",
             notes = "Busca todas as frases cadastradas no banco de dados da API",
@@ -54,6 +53,9 @@ public class PhraseResource {
         return ResponseEntity.status(HttpStatus.OK).body(phraseService.findAllValidation());
     }
 
+    /** Método que objetiva buscar uma frase no banco de dados através do id inserido pelo usuário no path
+     ** @param id identificação da frase na qual o usuário deseja buscar
+     ** @return Retorna um objeto do tipo PhraseDTO, caso seja encontrado no banco de dados após a busca pelo id */
     @ApiOperation(
             value = "Busca por ID",
             notes = "Busca uma frase no banco de dados do projeto com base no id passado pelo usuário",
@@ -71,6 +73,10 @@ public class PhraseResource {
         return ResponseEntity.status(HttpStatus.OK).body(phraseService.findByIdConverter(id));
     }
 
+    /** Método que objetiva o cadastrar uma nova frase no banco de dados através do JSON passado pelo usuário no
+     ** corpo da requisição. Este objeto é validado na camada de serviços
+     ** @param phraseDTO Recebe no corpo da requisição json, um objeto do tipo PhraseDTO
+     ** @return Retorna no corpo da response, o objeto do tipo JSON cadastrado */
     @ApiOperation(
             value = "Cadastrar nova frase",
             notes = "Salva uma nova frase no banco de dados da API",
@@ -89,6 +95,12 @@ public class PhraseResource {
         return ResponseEntity.status(HttpStatus.CREATED).body(phraseService.createValidation(phraseDTO));
     }
 
+    /** Método que objetiva atualizar uma frase no banco de dados, de acordo com o id da frase que o usuário deseja
+     ** atualizar e de acordo com o corpo da requisição passado pelo usuário, que deve conter os atributos do objeto
+     ** atualizados
+     ** @param id  Recebe pelo path, passado pelo usuário, um id do tipo Long
+     ** @param phraseDTO  Recebe no corpo da requisição, um objeto do tipo JSON que é convertido para o tipo PhraseDTO
+     ** @return Retorna no corpo da requisição o objeto atualizado, do tipo PhraseDTO */
     @ApiOperation(
             value = "Atualiza frase por id",
             notes = "Atualiza uma frase no banco de dados da API com base no id e no valor passado pelo usuário",
@@ -108,6 +120,10 @@ public class PhraseResource {
         return ResponseEntity.status(HttpStatus.CREATED).body(phraseService.updateValidation(id, phraseDTO));
     }
 
+    /** Método que objetiva deletar uma frase no banco de dados, de acordo com o id passado no path pelo usuário
+     ** @param id Recebe um id do tipo Long
+     ** @return Retorna o status da requisição, que pode ser OK ou NOT_FOUND, de acordo com o processamento na camada de
+     ** persistência e de serviços */
     @ApiOperation(
             value = "Deleta uma frase",
             notes = "Deleta uma frase do banco de dados com base no id passado pelo usuário através do path",

@@ -1,22 +1,23 @@
 package br.com.frases.resources.exceptions;
 
-import org.modelmapper.spi.ErrorMessage;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
+/** Classe cujo objetivo é realizar a manipulação de exceções
+ ** @author Gabriel Lagrota
+ ** @version 1.0.0
+ ** @since 06/06/2022
+ ** @email gabriellagrota23@gmail.com
+ ** @github https://github.com/LagrotaGabriel/API-Frases/blob/master/src/main/java/br/com/frases/resources/exceptions/ExceptionHandler.java */
 @ControllerAdvice
 public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -51,10 +52,8 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-                                                                  HttpHeaders headers,
-                                                                  HttpStatus status,
-                                                                  WebRequest request) {
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers,
+                                                                  HttpStatus status, WebRequest request) {
 
         StandartError error = new StandartError(
                 LocalDateTime.now(), 400, "Falha de violação de dados", "/api/phrase");

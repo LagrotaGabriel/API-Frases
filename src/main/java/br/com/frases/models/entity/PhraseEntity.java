@@ -6,6 +6,12 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/** Classe contendo todos os atributos e métodos do objeto PhraseEntity
+ ** @author Gabriel Lagrota
+ ** @version 1.0.0
+ ** @since 06/06/2022
+ ** @email gabriellagrota23@gmail.com
+ ** @github https://github.com/LagrotaGabriel/API-Frases/blob/master/src/main/java/br/com/frases/models/entity/PhraseEntity.java  */
 @Getter
 @Setter
 @AllArgsConstructor

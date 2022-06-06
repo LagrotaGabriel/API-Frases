@@ -14,20 +14,24 @@ import java.util.ArrayList;
 
 import static springfox.documentation.builders.PathSelectors.regex;
 
+/** Classe cujo objetivo é realizar a configuração do Swagger
+ ** @author Gabriel Lagrota
+ ** @version 1.0.0
+ ** @since 06/06/2022
+ ** @email gabriellagrota23@gmail.com
+ ** @github https://github.com/LagrotaGabriel/API-Frases/blob/master/src/main/java/br/com/frases/config/SwaggerConfig.java */
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
 
     @Bean
     public Docket productApi(){
-
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("br.com.frases"))
                 .paths(regex("/api.*"))
                 .build()
                 .apiInfo(metaInfo());
-
     }
 
     private ApiInfo metaInfo(){
