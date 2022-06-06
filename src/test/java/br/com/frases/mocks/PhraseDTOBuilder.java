@@ -27,6 +27,11 @@ public class PhraseDTOBuilder {
         return this;
     }
 
+    public PhraseDTOBuilder withNullPhrase(){
+        phraseDTO.setPhrase(null);
+        return this;
+    }
+
     public PhraseDTO build(){
         return phraseDTO;
     }
