@@ -36,7 +36,7 @@ public class SwaggerConfig {
 
     private ApiInfo metaInfo(){
         ApiInfo apiInfo = new ApiInfo(
-                "Calculadora de juros",
+                "Frases",
                 "API Rest para recebimento e envio de frases",
                 "1.0.0",
                 "Terms of Service",
